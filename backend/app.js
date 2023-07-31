@@ -3,6 +3,8 @@ const port = 5000;
 const app = express();
 const session = require("express-session");
 const cors = require("cors");
+const deleteExpiredPolls = require('./router/deleteExpiredPolls')
+const cron = require('node-cron');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +32,10 @@ app.use(
   app.use(require("./router/election"));
   app.use(require("./router/polling"));
   app.use(require("./router/vote"));
-  app.use(require("./router/invite"))
+  app.use(require("./router/invite"));
+
+  cron.schedule('0 * * * *', deleteExpiredPolls);
+
 app.listen(port, () => {
   console.log(`Server is running at ${port}`);
 });

@@ -19,7 +19,7 @@ router.post(
       const { name, location } = req.body;
       const candidates = await Candidate.find({constituency : name});
       //console.log(Candidate.constituency)
-      console.log("name",name)
+      console.log("name--",name)
       const existingConstituency = await Constituency.findOne({ name });
       if (existingConstituency) {
         return res

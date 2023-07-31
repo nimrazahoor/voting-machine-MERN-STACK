@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { Constituency, Vote, Candidate,User } = require("../modals/modals"); // Import the models
+const {  Vote, Candidate,User } = require("../modals/modals"); // Import the models
 const authenticateUserByToken = require("../middleware/authenticate");
 
 router.get("/calculateResults",authenticateUserByToken ,async (req, res) => {
   try {
-    console.log('Working-');;
+    console.log('Working');;
     const userId = req.userId;
     const user = await User.findOne({_id:userId});
     const constituency = user.constituency;

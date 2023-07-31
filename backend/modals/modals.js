@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
   picture: { type: String }, // Field to store the user's picture as Binary data
   isCandidate: { type: Boolean, default: false },
   isVoted: { type: Boolean, default: false },
-  isInvited:{type:Boolean, default: false},
+  isInvited: { type: Boolean, default: false },
   tokens: [
     {
       token: { type: String, required: true },
@@ -54,13 +54,11 @@ const candidateSchema = new mongoose.Schema({
   partyName: { type: String, required: true },
   partySymbol: { type: String },
   approved: { type: Boolean, default: false },
-  constituency: {type:mongoose.Schema.Types.String , ref:"User"},
+  constituency: { type: mongoose.Schema.Types.String, ref: "User" },
   voters: [
     {
-        type: mongoose.Schema.Types.String,
-        ref: "User",
-      
-     
+      type: mongoose.Schema.Types.String,
+      ref: "User",
     },
   ],
 });
@@ -77,6 +75,12 @@ const electionSchema = new mongoose.Schema({
   name: { type: String, unique: true },
   start_date: { type: Date, required: true },
   end_date: { type: Date, required: true },
+});
+
+const pollSchema = new mongoose.Schema({
+  election: { type: mongoose.Schema.Types.ObjectId, ref: "Election" },
+  start_time: { type: Date },
+  end_time: { type: Date },
   polling_duration: { type: Number },
 });
 
@@ -87,14 +91,14 @@ const voteSchema = new mongoose.Schema({
     ref: "Candidate",
     required: true,
   },
-  constituency : {type: String}
+  constituency: { type: String },
 });
 
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await bycrpt.hash(this.password, 12);
   }
-  next();;
+  next();
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -109,36 +113,11 @@ userSchema.methods.generateAuthToken = function () {
     console.log("Error while generating auth token", err);
   }
 };
-
-
-
-
-
-candidateSchema.pre('save', async function (next) {
-  try {
-    const candidateConstituencyName = this.constituency;
-    
-    const constituency = await Constituency.findOne({ name: candidateConstituencyName });
-    
-    if (!constituency) {
-      throw new Error(`Constituency with name '${candidateConstituencyName}' not found.`);
-    }
-    
-    if (!constituency.candidates.includes(this._id)) {
-      constituency.candidates.push(this._id);
-      await constituency.save();
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
 const User = mongoose.model("User", userSchema);
 const Candidate = mongoose.model("Candidate", candidateSchema);
 const Constituency = mongoose.model("constituency", constituencySchema);
-
+const Poll = mongoose.model("Poll", pollSchema);
 const Election = mongoose.model("Election", electionSchema);
 const Vote = mongoose.model("Vote", voteSchema);
 
-module.exports = { User, Candidate, Constituency, Election, Vote };
+module.exports = { User, Candidate, Constituency, Election, Vote, Poll };

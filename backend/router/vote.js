@@ -27,9 +27,7 @@ router.post('/addVote', authenticateUserByToken, async (req, res) => {
         return res.status(404).json({ message: 'Candidate not found.' });
       }
        console.log("userID->",userId);
-      // Make sure the userId is of type mongoose.Types.ObjectId
       console.log("voterId",userId);
-      // Check if the voter has already voted for this candidate
       //   const hasVoted = candidate.voters.some((voter) => voter.voter.equals(voterId));
       //   if (hasVoted) {
           //     return res.status(400).json({ message: 'You have already voted for this candidate.' });
@@ -40,9 +38,16 @@ router.post('/addVote', authenticateUserByToken, async (req, res) => {
         return res.status(400).json({ message: 'You have already voted for this candidate.' });
     }
     //   }
-    
-    // Add the voter's ID to the voters array
-    
+    const currentTime = Date.now();
+    if (!poll) {
+      console.log("Poll not found for the user's constituency");
+      return res.status(404).json({ message: 'Poll not found for the user\'s constituency.' });
+    }
+
+    if (currentTime < poll.start_time || currentTime > poll.end_time) {
+      console.log("Polling is not currently active for the user's constituency");
+      return res.status(400).json({ message: 'Polling is not currently active for the user\'s constituency.' });
+    }    
     
     // Create a new vote document
     const newVote = new Vote({

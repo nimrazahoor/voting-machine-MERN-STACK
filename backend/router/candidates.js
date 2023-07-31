@@ -59,46 +59,45 @@ router.get("/applied-candidates", async (req, res) => {
 // );
 router.get("/candidatesByConstituency", authenticateUserByToken, async (req, res) => {
   try {
-   // console.log("function working ");
     const userId = req.userId;
-  //  console.log(userId);
     const user = await User.findOne({ _id: userId });
     if (!user) {
       console.log("user not found");
     }
-   // console.log("user constituency--", user.constituency);
-
+    console.log(user.constituency)
     const candidates = await User.find({
       isCandidate: true,
-      constituency: user.constituency,
+      constituency: user.constituency, 
     });
 
-   // console.log("candidates------", candidates);
+   console.log("candidates------", candidates);
 
     const candidateUserIds = candidates.map(candidate => candidate._id);
     const CandidateUserName =  candidates.map(candidate =>candidate.username);
     
    // console.log("all_candidates user names", CandidateUserName);
-     Candidate.find({ approved: true, user: { $in: candidateUserIds} })
+     Candidate.find({ approved: true, user: { $in: candidateUserIds}  })
     .then(candidates => {
-  //    console.log("candidates",candidates);;
-      let all_candidates = candidates
-   //   console.log("all candidates",all_candidates)
-    //   let i =0;
-    //   const mergedArray = [];
-    //   for( i in candidates){
-    //   if(candidates.user[i] === candidateUserIds[i])
-    //   {
-    //      mergedArray = all_candidates?.map((candidate, index) => ({
-    //       username: CandidateUserName[index],
-    //       partyName: candidate.partyName,
-    //       partySymbol: candidate.partySymbol,
-    //     }));
+       console.log("candidates",candidates);;
+      let all_candidates = candidates;
+      console.log("all candidates",all_candidates)
+      let i = 0;
+      let mergedArray = []
+      for( i in candidates){
+       console.log("ccc",CandidateUserName[i]) 
+      if(candidates.user === candidateUserIds[i-1])
+      {
+         mergedArray = all_candidates?.map((candidate, index) => ({
+          username: CandidateUserName[index-1],
+          partyName: candidate.partyName,
+          partySymbol: candidate.partySymbol,
+        }));
           
-    //   }
-    // }
-    //   console.log("-----------------------------",mergedArray);
-       res.status(200).json(candidates);
+      }
+    }
+
+   // console.log("----------------------------",mergedArray);
+   return res.status(200).json(mergedArray);
     })
     .catch(err => {
       console.error(err);
