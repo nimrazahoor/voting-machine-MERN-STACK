@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { getInvitedUser, confirmAdmin } from "../APIcalls/APIs"; 
+
 function Invitation() {
   const [results, setResults] = useState();
   useEffect(() => {
@@ -9,30 +10,21 @@ function Invitation() {
 
   const fetchResults = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/getinvitedUser", {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-        },
-      });
-      console.log("response  data", response.data);
-      setResults(response.data);
+      const response = await getInvitedUser(sessionStorage.getItem("jwt"));
+      console.log("response data", response);
+      setResults(response);
     } catch (error) {
-      console.error("Error fetching results:", error);
+      console.error("Error fetching results:", error.message);
     }
   };
   const handleConfirmation = async () => {
     try {
-      const response = await axios.put("http://localhost:5000/confirmAdmin",{}, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-          userType: `${sessionStorage.getItem("userType")}`,
-        },
-      });
-      console.log("response  data", response.data);
-      alert(response.data.message);
+      const response = await confirmAdmin(sessionStorage.getItem("jwt"));
+      console.log("response data", response);
+      alert(response.message);
       setResults([]);
     } catch (error) {
-      console.error("Error fetching results:", error);
+      console.error("Error confirming admin status:", error.message);
     }
   };
   return (

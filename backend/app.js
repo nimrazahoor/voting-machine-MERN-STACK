@@ -5,6 +5,13 @@ const session = require("express-session");
 const cors = require("cors");
 const deleteExpiredPolls = require('./router/deleteExpiredPolls')
 const cron = require('node-cron');
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({ 
+  cloud_name: 'dsz0qytqq', 
+  api_key: '933494115572752', 
+  api_secret: 'IE3OKTL8AYUzIlG0gSmOe77EyY8' 
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +30,8 @@ app.use(
     saveUninitialized: true,
   })
   );
-  
+  deleteExpiredPolls();  
+  cron.schedule('0 * * * * ', deleteExpiredPolls);   
   app.use(require("./router/approveCandidate"));
   app.use(require("./router/auth"));
   app.use(require("./router/candidates"));
@@ -33,9 +41,9 @@ app.use(
   app.use(require("./router/polling"));
   app.use(require("./router/vote"));
   app.use(require("./router/invite"));
+  app.use(require("./router/votersByCandidate"));
 
-  cron.schedule('0 * * * *', deleteExpiredPolls);
 
-app.listen(port, () => {
+ app.listen(port, () => {
   console.log(`Server is running at ${port}`);
-});
+ });

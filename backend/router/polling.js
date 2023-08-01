@@ -35,6 +35,7 @@ router.post("/startPolling", authenticateUserByToken, async (req, res) => {
     });
     poll.save();
     console.log("poll ------",poll);
+    
     return res.status(200).json(poll);
   } catch (error) {
     console.error("Error starting polling:", error);

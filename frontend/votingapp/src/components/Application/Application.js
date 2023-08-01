@@ -1,43 +1,40 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import {useNavigate} from 'react-router-dom';
+import { applyCandidate } from '../APIcalls/APIs';
 function Application() {
   const [partyName, setPartyName] = useState('');
   const [partySymbol, setPartySymbol] = useState(null);
+  const [pictureURL,setPictureURL]  = useState();
+  const navigate = useNavigate();
+ 
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const formData = new FormData();
+  formData.append('partyName', partyName);
+  formData.append('partySymbol', partySymbol);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Create a FormData object to send the form data including the partySymbol file
-    const formData = new FormData();
-    formData.append('partyName', partyName);
-    formData.append('partySymbol', partySymbol);
-    console.log(partyName, partySymbol) 
-    try {
-      const token = sessionStorage.getItem('jwt');
-      if (!token) {
-        alert('You must be logged in to apply for candidacy');
-        return;
-      }
-      const response = await axios.post('http://localhost:5000/apply-candidate', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`,
-          
-        },
-      });
-
-      // Handle the response
-      console.log(response.data);
-      alert(response.data.message);
-      // Reset the form after successful submission
-      setPartyName('');
-      setPartySymbol(null);
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to apply for candidacy');
+  try {
+    const token = sessionStorage.getItem('jwt');
+    if (!token) {
+      alert('You must be logged in to apply for candidacy');
+      return;
     }
-  };
+
+    const responseData = await applyCandidate(formData, token);
+    console.log(responseData);
+    alert(responseData.message);
+
+    setPartyName('');
+    setPartySymbol(null);
+    navigate(-1);
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Failed to apply for candidacy: ' + error);
+    navigate(-1);
+  }
+};
+  
 
   return (
     <div>

@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-
+import { fetchConstituencies, signup } from "../APIcalls/APIs"
 import "./style.css";
 function Signup() {
   const [User, setUser] = useState({
@@ -17,19 +17,17 @@ function Signup() {
   const [constituencyName, setConstituencyName] = useState("");
   const [constituencies, setConstituencies] = useState();
   useEffect(() => {
-    const fetchConstituencies = async () => {
+    const fetchConstituenciesData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/constituencies"
-        );
-        setConstituencies(response.data);
-        console.log(response.data);
+        const constituenciesData = await fetchConstituencies();
+        setConstituencies(constituenciesData);
+        console.log(constituenciesData);
       } catch (error) {
         console.error("Error fetching constituencies:", error);
       }
     };
 
-    fetchConstituencies();
+    fetchConstituenciesData();  
   }, []);
 
   const handlePictureChange = (event) => {
@@ -37,8 +35,6 @@ function Signup() {
   };
   const pictureUrl = User.picture ? URL.createObjectURL(User.picture) : null;
   const handleSubmit = async (values) => {
-    //event.preventDefault();
-    console.log("handle submit working");
     const formData = new FormData();
     formData.append("picture", User.picture);
     formData.append("username", values.username);
@@ -49,28 +45,17 @@ function Signup() {
 
     try {
       console.log("values", formData);
-      const response = await axios.post(
-        "http://localhost:5000/signup",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("Response from server:", response.data);
-      if (response.status === 201) {
-        alert("registered Successfully");
+      const response = await signup(formData);
+      console.log("Response from server:", response);
+        alert("Success"+response.message);
         navigate("/login");
-      } else {
-        alert("Server error");
       }
-    } catch (error) {
+     catch (error) {
       console.error("Error submitting data:", error);
-      alert(error);
+      alert(error.message);
     }
   };
-
+ 
   return (
     <div className="container">
       <h1>Sign Up</h1>

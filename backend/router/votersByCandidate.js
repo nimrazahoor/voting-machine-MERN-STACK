@@ -5,8 +5,11 @@ const authenticateUserByToken = require('../middleware/authenticate');
 
 router.get('/getvotersbyCandidate', authenticateUserByToken, async (req, res) => {
   try {
+    console.log("working------")
     const candidateUserId = req.userId;
-    const candidate = await Candidate.findOne({ user: candidateUserId });
+    const candidate = await Candidate.findOne({ user: candidateUserId });;
+    console.log("workinggg candidate i",candidate);
+
     if (!candidate) {
       return res.status(400).json({ error: 'Candidate not found' });
     } 

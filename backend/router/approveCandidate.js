@@ -9,7 +9,7 @@ router.put('/approve-candidate/:candidateId',authenticateUserByToken, async (req
     
     const candidateId = req.params.candidateId;
     const {usertype} = req.headers;
-    console.log(usertype,candidateId)
+    //console.log(usertype,candidateId)
      if(usertype !== "Admin"){
       console.log("you are not Admin")
       res.status(500).json({ message: "You are not Admin" }
