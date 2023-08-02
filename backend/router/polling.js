@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Election, Poll } = require("../modals/modals");
+const { Election, Poll, Candidate ,User} = require("../modals/modals");
 const authenticateUserByToken = require("../middleware/authenticate");
 
 router.post("/startPolling", authenticateUserByToken, async (req, res) => {
@@ -35,7 +35,14 @@ router.post("/startPolling", authenticateUserByToken, async (req, res) => {
     });
     poll.save();
     console.log("poll ------",poll);
-    
+    try {
+      await Candidate.updateMany({}, { $set: { voters: [] } });
+      await User.updateMany({}, { $set: { isVoted: false } });
+
+    } catch (error) {
+      console.error("Error fetching candidates:", error);
+      res.status(500).json({ error: "Failed to fetch candidates" });
+    }    
     return res.status(200).json(poll);
   } catch (error) {
     console.error("Error starting polling:", error);
@@ -56,6 +63,7 @@ router.post("/endPolling", async (req, res) => {
 
     await Poll.deleteMany({ _id: { $in: expiredPolls.map(poll => poll._id) } });
     expiredPolls.duration = 0;
+    
     res.status(200).json({ message: "Polling ended successfully" });
   } catch (error) {
     console.error("Error ending polling:", error);

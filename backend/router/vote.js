@@ -66,7 +66,6 @@ router.post("/addVote", authenticateUserByToken, async (req, res) => {
       constituency: user.constituency,
     });
     console.log("candidate voters", candidate.voters);
-    candidate.constituency = user.constituency;
 
     candidate.voters.push(userId);
     user.isVoted = true;

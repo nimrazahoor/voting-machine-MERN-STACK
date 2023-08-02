@@ -19,8 +19,8 @@ cloudinary.config({
 const cloudinaryStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "images", // The folder in your Cloudinary account where you want to store the images
-    allowed_formats: ["jpg", "jpeg", "png"], // Allowed image formats
+    folder: "images", 
+    allowed_formats: ["jpg", "jpeg", "png"], 
   },
 });
 
@@ -83,7 +83,6 @@ router.post("/signup", upload.single("picture"), async (req, res) => {
   }
 });
 
-// In the login route, store the token in the session
 router.post("/login", async (req, res) => {
   try {
     const { email, password, userType } = req.body;
@@ -146,7 +145,6 @@ router.post(
 
       const partyName = req.body.partyName;
       const alreadyExists = await Candidate.find({ partyName: partyName });
-      //console.log(alreadyExists);
 
       if (!alreadyExists) {
         return res

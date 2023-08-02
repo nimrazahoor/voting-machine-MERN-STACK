@@ -19,7 +19,6 @@ router.post("/scheduleElection", authenticateUserByToken, async (req, res) => {
       return res.status(400).json({ message: "Invalid dates" });
     } 
     const alreadyExists = await Election.findOne({ name: electionName });
-    console.log("-------------------------", alreadyExists);
     if (alreadyExists) {
       res
         .status(400)
