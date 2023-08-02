@@ -1,30 +1,26 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import ScheduledElections from "../Elections/ScheduledElections";
 import Invitation from "../Invite/Invitation";
-
-function VotersList() {
+import { fetchVotersByCandidate } from "../APIcalls/APIs";
+import ResultComponent from "../Results/Result";
+function CandidateDashboard() {
   const [voters, setVoters] = useState([]);
-
+  const [pollEnded, setPollEnded] = useState();
+  
   useEffect(() => {
-    const fetchVoters = async () => {
+    setPollEnded(sessionStorage.getItem("poll"));
+    const fetchVotersData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/getVotersByCandidate",
-          {
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem("jwt")}`, // Add the authorization token (you should handle this in your authentication logic)
-            },
-          }
-        );
-        setVoters(response.data);
-        console.log("voters", response.data);
+        const token = sessionStorage.getItem("jwt");
+        const votersData = await fetchVotersByCandidate(token);
+        setVoters(votersData);
+        console.log("voters", votersData);
       } catch (error) {
         console.error("Error fetching voters:", error);
       }
     };
 
-    fetchVoters();
+    fetchVotersData();
   }, []);
 
   return (
@@ -32,6 +28,10 @@ function VotersList() {
       <div className="container">
         <h1>Invitations</h1>
         <Invitation />
+
+      </div>
+      <div className="container">
+      {!pollEnded ? <ResultComponent /> : ""}
       </div>
       <div className="container">
         <h1>List of Voters</h1>
@@ -52,4 +52,4 @@ function VotersList() {
   );
 }
 
-export default VotersList;
+export default CandidateDashboard;

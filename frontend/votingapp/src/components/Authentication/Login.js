@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./style.css";
-
+import {login} from "../APIcalls/APIs"
 function Login() {
   const [User, setUser] = useState({ email: "", password: "", userType: "" });
   const navigate = useNavigate();
@@ -15,39 +14,36 @@ function Login() {
       [name]: value
     }));
   };
- 
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-        console.log("values", User);
-        const response = await axios.post("http://localhost:5000/login", User);
-        console.log("response ",response)
-        sessionStorage.setItem('jwt',response.data.token);
-        sessionStorage.setItem('userType',response.data.userType);
-        console.log("response.data at login",response.data.userType)
-        if (response.status === 201) {
-          alert("Login Successfully");
-          if(User.userType === "Admin"){
-          navigate('/admin-dashboard');}
-          if(User.userType === "Voter")
-          { 
-      
-            navigate('/voter-dashboard');
-          }
-          if(User.userType ==="Candidate")
-          {
-            navigate('/candidate-dashboard')
-          }
-         
-        } else {
-          alert("Login Failed",response.data.message); // Handle login failure scenario
+      console.log("values", User);
+      const response = await login(User);
+      console.log("response ", response);
+      sessionStorage.setItem("jwt", response.token);
+      sessionStorage.setItem("userType", response.userType);
+      console.log("response.data at login", response.userType);
+      console.log(response.status)
+      if (response.status !== 400) {
+        console.log("yyeyeyey");
+        alert(response.message);
+        if (User.userType === "Admin") {
+          navigate("/admin-dashboard");
         }
-      } catch (error) {
-        console.error("Error Login:", error);
+        if (User.userType === "Voter") {
+          navigate("/voter-dashboard");
+        }
+        if (User.userType === "Candidate") {
+          navigate("/candidate-dashboard");
+        }
+      } else {
         alert("Login Failed");
       }
+    } catch (error) {
+      console.error("Error Login:"+ error.response.message);
+      alert("Login Failed");
+    }
   };
-
   return (
     <div>
        

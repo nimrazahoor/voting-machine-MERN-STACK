@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Invite = () => {
   const [selectedUser, setSelectedUser] = useState("");
   const [constituency, setConstituency] = useState("");
   const [cnic, setCnic] = useState("");
   const [results, setResults] = useState();
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchResults();
     console.log(results);
@@ -49,6 +50,7 @@ const Invite = () => {
       console.log(response);
 
       alert("Invitation sent successfully!");
+      navigate('/admin-dashboard');
     } catch (error) {
       console.error("Error inviting user:", error);
     }

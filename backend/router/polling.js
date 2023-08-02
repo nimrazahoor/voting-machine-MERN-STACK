@@ -1,83 +1,65 @@
-
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { Election } = require("../modals/modals");
-const authenticateUserByToken = require('../middleware/authenticate');
+const { Election, Poll } = require("../modals/modals");
+const authenticateUserByToken = require("../middleware/authenticate");
 
-router.post('/startPolling', authenticateUserByToken,async (req, res) => {
-    console.log("polling function workking  working")
-    try {
-        if (req.headers.usertype !== "Admin") {
-            console.log("Working")
-            console.log("You are not admin");
-            return res
-              .status(404)
-              .json({
-                message: "You cannot create constituency you are not admin ",
-              });
-          }
-      const { electionId, pollingDuration } = req.body;
-     console.log("req.body ",req.body)
-      const election = await Election.findById(electionId);
-     console.log("Election",election);
-      if (!election) {
-        return res.status(404).json({ error: 'Election not found' });
-      }
-  
-      if (election.start_date <= Date.now()) {
-        return res.status(400).json({ error: 'Polling has already started for this election' });
-      }
-  
-      const end_date = new Date(Date.now() + pollingDuration * 60000);
-  
-      election.start_date = Date.now();
-      election.end_date = end_date;
-      election.polling_duration = pollingDuration;
-  
-      await election.save();
-  
-      res.status(200).json({ message: 'Polling started successfully' });
-    } catch (error) {
-      console.error('Error starting polling:', error);
-      res.status(500).json({ error: 'Internal server error' });
+router.post("/startPolling", authenticateUserByToken, async (req, res) => {
+  console.log("polling function workking  working");
+  try {
+    if (req.headers.usertype !== "Admin") {
+      console.log("Working");
+      console.log("You are not admin")
+      return res.status(404).json({
+        message: "You cannot create constituency you are not admin ",
+      });
     }
-  });
-  
-router.post('/endPolling', async (req, res) => {
-    try {
-        if (req.headers.usertype !== "Admin") {
-            console.log("You are not admin");
-            return res
-              .status(404)
-              .json({
-                message: "You cannot create constituency you are not admin ",
-              });
-          }
-      const { electionId } = req.body;
-  
-      const election = await Election.findById(electionId);
-  
-      if (!election) {
-        return res.status(404).json({ error: 'Election not found' });
-      }
-  
-      if (!election.start_date || !election.end_date) {
-        return res.status(400).json({ error: 'Polling has not been started for this election' });
-      }
-  
-      if (election.end_date <= Date.now()) {
-        return res.status(400).json({ error: 'Polling has already ended for this election' });
-      }
-  
-      election.end_date = Date.now();
-      await election.save();
-  
-      res.status(200).json({ message: 'Polling ended successfully' });
-    } catch (error) {
-      console.error('Error ending polling:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  });
+    const start_time = Date.now();
+    const electionId = req.body.electionId;
 
-  module.exports = router;
-  
+    const election = await Election.findById(electionId);
+    if(!election)
+    {
+      return res.status(400).json({
+        message: "Elections not found",
+      });
+    }
+    const durationInMinutes = Number(req.body.duration); 
+    const durationInMilliseconds = durationInMinutes * 60 * 1000; 
+
+    const endTime = start_time + durationInMilliseconds;
+    const poll = new Poll({
+      election:electionId,
+      start_time: Date.now(),
+      end_time: endTime,
+      polling_duration : durationInMilliseconds,
+    });
+    poll.save();
+    console.log("poll ------",poll);
+    
+    return res.status(200).json(poll);
+  } catch (error) {
+    console.error("Error starting polling:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/endPolling", async (req, res) => {
+  try {
+    if (req.headers.usertype !== "Admin") {
+      console.log("You are not admin");
+      return res.status(404).json({
+        message: "You cannot end Polling you are not admin ",
+      });
+    }
+    const electionId = req.body.electionId;
+    const expiredPolls = await Poll.find({ election: electionId });
+
+    await Poll.deleteMany({ _id: { $in: expiredPolls.map(poll => poll._id) } });
+    expiredPolls.duration = 0;
+    res.status(200).json({ message: "Polling ended successfully" });
+  } catch (error) {
+    console.error("Error ending polling:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+module.exports = router;

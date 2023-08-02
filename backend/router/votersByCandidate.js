@@ -3,17 +3,18 @@ const router = express.Router();
 const { User, Candidate } = require('../modals/modals');
 const authenticateUserByToken = require('../middleware/authenticate');
 
-// Route to get all voters by candidate's constituency
 router.get('/getvotersbyCandidate', authenticateUserByToken, async (req, res) => {
   try {
+    console.log("working------")
     const candidateUserId = req.userId;
-    const candidate = await Candidate.findOne({ user: candidateUserId });
+    const candidate = await Candidate.findOne({ user: candidateUserId });;
+    console.log("workinggg candidate i",candidate);
+
     if (!candidate) {
       return res.status(400).json({ error: 'Candidate not found' });
     } 
     const user = await User.findOne({_id: candidateUserId});
     const constituencyName = user.constituency;
-    //const constituencyName = candidate.constituency;
     const voters = await User.find({ constituency: constituencyName, userType: 'Voter' });
     res.status(200).json(voters);
   } catch (error) {

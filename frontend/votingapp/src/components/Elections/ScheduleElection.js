@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { scheduleElection } from "../APIcalls/APIs";
 import { useNavigate } from "react-router-dom";
 
 function ScheduleElection() {
@@ -21,17 +21,11 @@ function ScheduleElection() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:5000/scheduleElection", electionData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          UserType: `${userType}`,
-        },
-      })
+    scheduleElection(electionData, token, userType)
       .then((response) => {
-        console.log("Election scheduled successfully:", response.data);
-        alert("Elections Scheduled Sucessfully!");
-        alert(response.data.message);
+        console.log("Election scheduled successfully:", response);
+        alert("Elections Scheduled Successfully!");
+        alert(response.message);
         navigate("/admin-dashboard");
       })
       .catch((error) => {

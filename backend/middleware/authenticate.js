@@ -12,13 +12,11 @@ const authenticateUserByToken = async (req, res, next) => {
     }
     const token = authHeader.split(' ')[1];
     const decodedToken = jwt.verify(token, 'SECRET_KEY');
-     console.log("decodedToken",decodedToken)
     const user = await User.findOne({ _id: decodedToken._id, 'tokens.token': token });
     if (!user) {
       console.log("token dont match")
       return res.status(401).json({ error: 'User not found or invalid token' });
     }
-   
     console.log("match")
     req.userId = user._id;
     next();

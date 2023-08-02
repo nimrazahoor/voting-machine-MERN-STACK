@@ -7,7 +7,7 @@ router.post(
   authenticateUserByToken,
   async (req, res) => {
     try {
-      console.log(req.headers);
+      //console.log(req.headers);
       if (req.headers.usertype !== "Admin") {
         console.log("You are not admin");
         return res
@@ -19,14 +19,14 @@ router.post(
       const { name, location } = req.body;
       const candidates = await Candidate.find({constituency : name});
       //console.log(Candidate.constituency)
-      console.log("name",name)
+    //  console.log("name--",name)
       const existingConstituency = await Constituency.findOne({ name });
       if (existingConstituency) {
         return res
           .status(400)
           .json({ error: "Constituency with the same name already exists" });
       }
-      console.log("candidates",candidates)
+    //  console.log("candidates",candidates)
       const newConstituency = new Constituency({ name, location ,candidates});
       await newConstituency.save();
 
