@@ -55,6 +55,16 @@ const login = async (user) => {
       throw new Error("Error fetching candidates");
     }
   };
+  const fetchWinners = async (name) => {
+    try {
+      console.log(name);
+      const response = await axios.get(`${BASE_URL}/allResults?name=${name}`);
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching candidates");
+    }
+  };
+  
   const fetchVotersByCandidate = async (token) => {
     try {
       const response = await axios.get(`${BASE_URL}/getvotersbyCandidate`, {
@@ -280,5 +290,5 @@ const login = async (user) => {
 export { applyCandidate,login ,castVote,fetchCandidates,fetchVotersByCandidate,startPolling,
     signup,fetchConstituencies,approveCandidate,fetchAppliedCandidates,
     scheduleElection,createConstituency,endPolling,getScheduledElections
-   ,getInvitedUser, confirmAdmin,inviteUser,getAllUsersOtherThanAdmin,fetchVotesCastedToCandidate
+   ,getInvitedUser, confirmAdmin,inviteUser,getAllUsersOtherThanAdmin,fetchVotesCastedToCandidate,fetchWinners
 };

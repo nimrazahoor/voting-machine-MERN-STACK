@@ -23,9 +23,9 @@ const ResultComponent = () => {
 
   return (
     <div className='card'>
-      <h1>Results</h1>
-      <h2>Winner: {results?.name}</h2>
-      <h2>Party:   {results?.partyName}</h2>
+      <h4>Results</h4>
+      <h3>Winner: {results?.name}</h3>
+      <h3>Party:   {results?.partyName}</h3>
     </div>
   );
 };

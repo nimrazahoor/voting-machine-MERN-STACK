@@ -6,6 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 
+import AllResultsConstituencies from "./components/Results/AllResultsConstituencies";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import Application from "./components/Application/Application";
 import CandidateDashboard from "./components/Dashboard/CandidateDashboard";
@@ -20,13 +21,14 @@ import PageNotFound from "./PageNotFound";
 import Navbar from "./components/Navbar/Navbar";
 import Invite from "./components/Invite/Invite";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+
 import './App.css'
+
 function App() {
   return (
     <div className="App">
       <Navbar />
       <PollingTimer />
-
       <div className="App">
         <Router>
           <Routes>

@@ -38,7 +38,7 @@ const handleSubmit = async (e) => {
 
   return (
     <div>
-      <h1>Application for becoming Candidate</h1>
+      <h4>Application for becoming Candidate</h4>
       <form className="container" onSubmit={handleSubmit}>
         <label htmlFor="partyName">Party Name:</label>
         <input

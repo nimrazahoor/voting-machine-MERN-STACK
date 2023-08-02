@@ -57,9 +57,7 @@ const candidateSchema = new mongoose.Schema({
 const constituencySchema = new mongoose.Schema({
   name: { type: String, required: true,unique:true },
   location: { type: String },
-  users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   electionSchema: [{ type: mongoose.Schema.Types.ObjectId, ref: "Election" }],
-  candidates: [{ type: mongoose.Schema.Types.ObjectId, ref: "Candidate" }],
 });
 
 const electionSchema = new mongoose.Schema({

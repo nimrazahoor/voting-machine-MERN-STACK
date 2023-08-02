@@ -49,7 +49,7 @@ function AppliedCandidates() {
   }
   return (
     <div>
-    <h1>Applied Candidates</h1>
+    <h4>Applied Candidates</h4>
     <div className="card-container">
       <CloudinaryContext cloudName="dsz0qytqq">
         {candidates?.map((candidate) => (

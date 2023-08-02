@@ -47,7 +47,7 @@ function Login() {
   return (
     <div>
        
-      <form className="container" onSubmit={handleSubmit}>
+      <form className="container card w-25" onSubmit={handleSubmit}>
         <label>Select User Type</label>
         <br />
 

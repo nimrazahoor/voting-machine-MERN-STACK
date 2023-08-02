@@ -42,11 +42,11 @@ function ScheduledElections() {
 
   return (
     <div>
-      <h1 className="mt-5">Scheduled Elections</h1>
       <div className="row">
         {scheduledElections.map((election) => (
           <div key={election._id} className="col-md-6 col-lg-4 mb-4">
             <div className="card">
+           <strong> <h4 >Scheduled Elections</h4> </strong> 
               <div className="card-body">
                 <h5 className="card-title">{election.name}</h5>
                 <p className="card-text">Start Date: {new Date(election.start_date).toLocaleDateString()}</p>

@@ -26,10 +26,10 @@ router.get(
       if (!user) {
         console.log("user not found");
       }
-      console.log("user", user);
+       console.log("user", user);
       // console.log("64c298e53f159469918e02dc" === "64c298e53f159469918e02dc");
-      const candidate = Candidate.findOne({ user: userId, approved: true });
-      candidate.exec().then((candidate) => {
+       const candidate = Candidate.findOne({ user: userId, approved: true });
+       candidate.exec().then((candidate) => {
         if (!candidate) {
           console.log("Candidate not found.");
         } else {

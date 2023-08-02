@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Election, Poll, Candidate ,User} = require("../modals/modals");
+const { Election, Poll, Candidate ,User,Vote} = require("../modals/modals");
 const authenticateUserByToken = require("../middleware/authenticate");
 
 router.post("/startPolling", authenticateUserByToken, async (req, res) => {
@@ -38,7 +38,7 @@ router.post("/startPolling", authenticateUserByToken, async (req, res) => {
     try {
       await Candidate.updateMany({}, { $set: { voters: [] } });
       await User.updateMany({}, { $set: { isVoted: false } });
-
+      await Vote.deleteMany({})
     } catch (error) {
       console.error("Error fetching candidates:", error);
       res.status(500).json({ error: "Failed to fetch candidates" });

@@ -23,8 +23,8 @@ function CreateConstituency() {
   };
 
   return (
-    <div className="container">
-      <h1>Create Constituency</h1>
+    <div className="card">
+      <h4>Create Constituency</h4>
       <form onSubmit={handleSubmit}>
         <label>
           Constituency Name:

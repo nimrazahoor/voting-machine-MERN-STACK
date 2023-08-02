@@ -55,7 +55,7 @@ function Signup() {
   };
  
   return (
-    <div className="container">
+    <div className="container card w-50">
       <h1>Sign Up</h1>
       <Formik
           onSubmit={handleSubmit}

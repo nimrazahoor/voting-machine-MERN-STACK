@@ -6,6 +6,7 @@ import {
   fetchVotesCastedToCandidate,
 } from "../APIcalls/APIs";
 import ResultComponent from "../Results/Result";
+import AllResultsConstituencies from "../Results/AllResultsConstituencies";
 function CandidateDashboard() {
   const [voters, setVoters] = useState([]);
   const [myVoters, setMyVoters] = useState(0);
@@ -31,15 +32,16 @@ function CandidateDashboard() {
 
   return (
     <div className="wrapper">
+            <AllResultsConstituencies/>
       <div className="container">
-        <h1>Invitations</h1>
+        <h4>Invitations</h4>
         <Invitation />
       </div>
       <div className="container">
         {!pollEnded ? <ResultComponent /> : ""}
         <div className="container">
-          <h1>Votes Casted to you:</h1>
-          <h2>{!pollEnded ? myVoters : ""}</h2>
+          <h4>Votes Casted to you:</h4>
+          <h5>{!pollEnded ? myVoters : ""}</h5>
         </div>
       </div>
       <div className="container">
@@ -54,7 +56,7 @@ function CandidateDashboard() {
           </ul>
         )}
       </div>
-      <div>
+      <div className="container">
         <ScheduledElections />
       </div>
     </div>
