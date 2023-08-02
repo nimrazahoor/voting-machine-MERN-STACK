@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {login} from "../APIcalls/APIs";
-import './style.css'
+
+import { login } from "../APIcalls/APIs";
+
+import "./style.css";
+
 function Login() {
   const [User, setUser] = useState({ email: "", password: "", userType: "" });
   const navigate = useNavigate();
@@ -11,21 +14,18 @@ function Login() {
     const { name, value } = e.target;
     setUser((prevUser) => ({
       ...prevUser,
-      [name]: value
+      [name]: value,
     }));
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log("values", User);
       const response = await login(User);
-      console.log("response ", response);
       sessionStorage.setItem("jwt", response.token);
       sessionStorage.setItem("userType", response.userType);
-      console.log("response.data at login", response.userType);
-      console.log(response.status)
+
       if (response.status !== 400) {
-        console.log("yyeyeyey");
         alert(response.message);
         if (User.userType === "Admin") {
           navigate("/admin-dashboard");
@@ -40,13 +40,13 @@ function Login() {
         alert("Login Failed");
       }
     } catch (error) {
-      console.error("Error Login:"+ error.response.message);
+      console.error("Error Login:" + error.response.message);
       alert("Login Failed");
     }
   };
+
   return (
     <div>
-       
       <form className="container card w-25" onSubmit={handleSubmit}>
         <label>Select User Type</label>
         <br />
@@ -74,7 +74,7 @@ function Login() {
           placeholder="Enter your Email"
           onChange={handleChange}
         ></input>
-        <br/>
+        <br />
         <label>Password:</label>
         <br />
         <input

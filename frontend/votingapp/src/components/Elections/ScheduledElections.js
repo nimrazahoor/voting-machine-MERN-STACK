@@ -27,6 +27,7 @@ function ScheduledElections() {
   };
 
   const handleEndPolling = async (electionId) => {
+    
     try {
       const token = sessionStorage.getItem("jwt");
       const userType = sessionStorage.getItem("userType");
@@ -34,7 +35,6 @@ function ScheduledElections() {
       sessionStorage.removeItem("poll");
       alert("Poll Ended");
       window.location.reload(false);
-      console.log("Polling ended:", response);
     } catch (error) {
       console.error("Error ending polling:", error);
     }
@@ -46,15 +46,26 @@ function ScheduledElections() {
         {scheduledElections.map((election) => (
           <div key={election._id} className="col-md-6 col-lg-4 mb-4">
             <div className="card">
-           <strong> <h4 >Scheduled Elections</h4> </strong> 
+              <strong>
+                {" "}
+                <h4>Scheduled Elections</h4>{" "}
+              </strong>
               <div className="card-body">
                 <h5 className="card-title">{election.name}</h5>
-                <p className="card-text">Start Date: {new Date(election.start_date).toLocaleDateString()}</p>
-                <p className="card-text">End Date: {new Date(election.end_date).toLocaleDateString()}</p>
+                <p className="card-text">
+                  Start Date:{" "}
+                  {new Date(election.start_date).toLocaleDateString()}
+                </p>
+                <p className="card-text">
+                  End Date: {new Date(election.end_date).toLocaleDateString()}
+                </p>
                 {userType === "Admin" && (
                   <div>
                     {!showPolling ? (
-                      <button className="btn btn-primary" onClick={() => handlePolling(election._id)}>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handlePolling(election._id)}
+                      >
                         Start Polling
                       </button>
                     ) : (

@@ -11,12 +11,9 @@ router.get("/allResults", async (req, res) => {
     if (!constituency) {
       return res.status(404).json({ error: "Constituency not found." });
     }
-    
-    const constituencyId = constituency._id;
-    console.log("Getting results of each constituency");
-    
+    const constituencyId = constituency._id;    
     const all_results = await Result.find({ constituency: constituencyId });
-        return res.status(200).json(all_results);
+    return res.status(200).json(all_results);
   } catch (error) {
     console.error("Error fetching results:", error);
     return res.status(500).json({ error: "Error fetching results." });

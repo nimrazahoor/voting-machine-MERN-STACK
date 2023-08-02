@@ -26,7 +26,6 @@ function AllResultsConstituencies() {
   const fetchWinnersByConstituency = async () => {
     try {
       const response = await fetchWinners(selectedConstituency);
-      console.log(selectedConstituency)
       setWinners(response);
     } catch (error) {
       console.error('Error fetching winners:', error);
@@ -34,11 +33,11 @@ function AllResultsConstituencies() {
   };
 
   return (
-    <div className='card w-50'>
+    <div className='container card w-25'>
       <h4>All Results - Constituencies</h4>
       <div>
         <label>Select Constituency: </label>
-        <select className='dropdown' value={selectedConstituency} onChange={handleConstituencyChange}>
+        <select  value={selectedConstituency} onChange={handleConstituencyChange}>
           <option value="">--Select Constituency--</option>
           {constituencies.map((constituency) => (
             <option key={constituency._id} value={constituency.name}>
@@ -56,7 +55,7 @@ function AllResultsConstituencies() {
           <ul>
             {winners.map((winner) => (
               <li key={winner._id}>
-                {winner.name} - Party: {winner.partyName} - Total Votes: {winner.total_votes}
+                {winner.name} - Party: {winner.partyName} - Won by : {winner.total_votes} Votes
               </li>
             ))}
           </ul>

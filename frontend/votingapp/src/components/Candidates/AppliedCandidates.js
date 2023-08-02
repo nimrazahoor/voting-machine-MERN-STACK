@@ -18,7 +18,6 @@ function AppliedCandidates() {
       try {
         const candidatesData = await fetchAppliedCandidates(token, userType); 
         setCandidates(candidatesData);
-        console.log("party symbol",candidatesData.partySymbol)
       } catch (error) {
         console.error('Error fetching candidates:', error);
       }
@@ -28,7 +27,6 @@ function AppliedCandidates() {
   }, [token, userType]);
   const handleApproval = async (candidateId) => {
     try {
-      console.log("userType", userType);
       const success = await approveCandidate(token, userType, candidateId); 
 
       if (success) {
@@ -47,6 +45,7 @@ function AppliedCandidates() {
       console.error('Error approving candidate:', error);
     }
   }
+  
   return (
     <div>
     <h4>Applied Candidates</h4>

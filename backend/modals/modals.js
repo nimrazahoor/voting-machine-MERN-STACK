@@ -102,7 +102,6 @@ userSchema.methods.generateAuthToken = function () {
 
     this.tokens = this.tokens.concat({ token: token });
     this.save();
-    console.log("token");
     return token;
   } catch (err) {
     console.log("Error while generating auth token", err);

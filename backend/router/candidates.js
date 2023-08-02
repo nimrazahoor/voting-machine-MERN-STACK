@@ -20,26 +20,22 @@ router.get(
   authenticateUserByToken,
   async (req, res) => {
     try {
-      console.log("CASTED------ ");
       const userId = req.userId;
       const user = await User.findOne({ _id: userId });
       if (!user) {
-        console.log("user not found");
+        return res.status(404).json({message:"User not found"});
+
       }
-       console.log("user", user);
-      // console.log("64c298e53f159469918e02dc" === "64c298e53f159469918e02dc");
        const candidate = Candidate.findOne({ user: userId, approved: true });
        candidate.exec().then((candidate) => {
         if (!candidate) {
-          console.log("Candidate not found.");
+          return res.status(404).json({message:"Candidate not found"});
+
         } else {
-          console.log("Found candidate:", candidate);
           const VotersCount = candidate.voters?.length;
-          console.log("voterslength--PPPPPPPPPP--", VotersCount);
           return res.status(200).json(VotersCount);
         }
       });
-      console.log("Found candidate:", candidate);
     } catch (error) {
       console.error("Error while fetching Your Voters:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -54,9 +50,9 @@ router.get(
       const userId = req.userId;
       const user = await User.findOne({ _id: userId });
       if (!user) {
-        console.log("user not found");
+        return res.status(404).json({message:"User not found"});
+
       }
-      // console.log(user.constituency);
       const candidates = await User.find({
         isCandidate: true,
         constituency: user.constituency,

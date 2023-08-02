@@ -27,7 +27,6 @@ const login = async (user) => {
   };
   const castVote = async (candidateId) => {
     try {
-      console.log(candidateId,"at api")
       const response = await axios.post(
         `${BASE_URL}/addVote`,
         { candidateId} ,
@@ -57,7 +56,6 @@ const login = async (user) => {
   };
   const fetchWinners = async (name) => {
     try {
-      console.log(name);
       const response = await axios.get(`${BASE_URL}/allResults?name=${name}`);
       return response.data;
     } catch (error) {
@@ -84,7 +82,6 @@ const login = async (user) => {
           Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
         },
       });
-      console.log(response.data)
       return response.data;
     } catch (error) {
       throw new Error("Error fetching voters");

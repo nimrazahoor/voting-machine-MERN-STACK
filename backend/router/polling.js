@@ -4,11 +4,8 @@ const { Election, Poll, Candidate ,User,Vote} = require("../modals/modals");
 const authenticateUserByToken = require("../middleware/authenticate");
 
 router.post("/startPolling", authenticateUserByToken, async (req, res) => {
-  console.log("polling function workking  working");
   try {
     if (req.headers.usertype !== "Admin") {
-      console.log("Working");
-      console.log("You are not admin")
       return res.status(404).json({
         message: "You cannot create constituency you are not admin ",
       });
@@ -33,8 +30,9 @@ router.post("/startPolling", authenticateUserByToken, async (req, res) => {
       end_time: endTime,
       polling_duration : durationInMilliseconds,
     });
+
     poll.save();
-    console.log("poll ------",poll);
+
     try {
       await Candidate.updateMany({}, { $set: { voters: [] } });
       await User.updateMany({}, { $set: { isVoted: false } });
@@ -53,7 +51,6 @@ router.post("/startPolling", authenticateUserByToken, async (req, res) => {
 router.post("/endPolling", async (req, res) => {
   try {
     if (req.headers.usertype !== "Admin") {
-      console.log("You are not admin");
       return res.status(404).json({
         message: "You cannot end Polling you are not admin ",
       });

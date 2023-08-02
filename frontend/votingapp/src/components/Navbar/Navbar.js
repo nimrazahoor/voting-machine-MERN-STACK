@@ -10,7 +10,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a className="navbar-brand" href="#">
+      <a className="navbar-brand" href="/">
         Voting App
       </a>
       <button
@@ -29,7 +29,7 @@ const Navbar = () => {
         <ul className="navbar-nav">
           <li className="nav-item active">
             <a className="nav-link" href="/">
-              Resgister <span className="sr-only"></span>
+              Register <span className="sr-only"></span>
             </a>
           </li>
           <li className="nav-item">
@@ -37,19 +37,18 @@ const Navbar = () => {
               Login
             </a>
           </li>
-          <li className="nav-item">
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={handleLogout}
-            >
-              <a className="nav-link" href="/login">
-                Logout
-              </a>
-            </button>
-          </li>
         </ul>
       </div>
+
+      <button
+        type="button"
+        className="btn btn-primary ml-auto"
+        onClick={handleLogout}
+      >
+        <a className="nav-link" href="/login">
+          Logout
+        </a>
+      </button>
     </nav>
   );
 };
