@@ -20,14 +20,12 @@ import PageNotFound from "./PageNotFound";
 import Navbar from "./components/Navbar/Navbar";
 import Invite from "./components/Invite/Invite";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-
-import "./App.css";
-
+import './App.css'
 function App() {
   return (
     <div className="App">
-      <PollingTimer />
       <Navbar />
+      <PollingTimer />
 
       <div className="App">
         <Router>

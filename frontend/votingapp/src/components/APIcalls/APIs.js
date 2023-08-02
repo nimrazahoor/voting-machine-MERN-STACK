@@ -25,14 +25,15 @@ const login = async (user) => {
       throw error;
     }
   };
-  const castVote = async (candidateId,token) => {
+  const castVote = async (candidateId) => {
     try {
+      console.log(candidateId,"at api")
       const response = await axios.post(
         `${BASE_URL}/addVote`,
-        { candidateId },
+        { candidateId} ,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
           },
         }
       );
@@ -66,6 +67,20 @@ const login = async (user) => {
       throw new Error("Error fetching voters");
     }
   }; 
+  const fetchVotesCastedToCandidate = async (token) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/getVotesCastedToCandidate`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
+        },
+      });
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching voters");
+    }
+  }; 
+
    const fetchConstituencies = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/constituencies`);
@@ -251,7 +266,7 @@ const login = async (user) => {
         { duration, electionId },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
             userType: `${userType}`,
           },
         }
@@ -265,5 +280,5 @@ const login = async (user) => {
 export { applyCandidate,login ,castVote,fetchCandidates,fetchVotersByCandidate,startPolling,
     signup,fetchConstituencies,approveCandidate,fetchAppliedCandidates,
     scheduleElection,createConstituency,endPolling,getScheduledElections
-   ,getInvitedUser, confirmAdmin,inviteUser,getAllUsersOtherThanAdmin
+   ,getInvitedUser, confirmAdmin,inviteUser,getAllUsersOtherThanAdmin,fetchVotesCastedToCandidate
 };

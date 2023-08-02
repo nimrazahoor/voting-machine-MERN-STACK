@@ -22,7 +22,7 @@ const ResultComponent = () => {
   };
 
   return (
-    <div className='container'>
+    <div className='card'>
       <h1>Results</h1>
       <h2>Winner: {results?.name}</h2>
       <h2>Party:   {results?.partyName}</h2>

@@ -1,9 +1,7 @@
-import axios, { formToJSON } from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { fetchConstituencies, signup } from "../APIcalls/APIs"
-import "./style.css";
 function Signup() {
   const [User, setUser] = useState({
     username: "",

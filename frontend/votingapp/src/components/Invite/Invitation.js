@@ -28,7 +28,7 @@ function Invitation() {
     }
   };
   return (
-    <div>
+    <div className="card">
       {results ? (
         <>
           <h3> You are Invited to become Admin!</h3>

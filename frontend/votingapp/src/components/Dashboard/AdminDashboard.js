@@ -10,25 +10,30 @@ function AdminDashboard() {
   return (
     <div>
       <h1>Welcome to Admin Dashboard</h1>
-      <br />
-      <br />
+      <div className="wrapper">
+
+      <div className="container">
+
+      <div className="card">
+        <h2>Invite Others to become Admin</h2>
       <button className="submit-button" onClick={() => navigate("/invite")}>
         Invite
       </button>
-      <div className="wrapper">
-        <div>
-          <br />
-        </div>
+
+      </div>
+      </div>
+    
         <div className="container">
           <AppliedCandidates />
         </div>
-        <ScheduledElections />
-        <br />
-      </div>
-
-      <br />
-      <div className="wrapper">
         <div className="container">
+      <ScheduledElections />
+        </div>
+        
+      
+        <div className="container">
+          <div className="card">
+
           <h1>Click Here for Creating Constituencies</h1>
           <br />
           <button
@@ -37,9 +42,12 @@ function AdminDashboard() {
           >
             Create Constituencies
           </button>
+          </div>
         </div>
-        <br />
+        
         <div className="container">
+          <div className="card">
+
           <h1>Click Here for Schedule Elections</h1>
           <button
             className="submit-button"
@@ -47,8 +55,11 @@ function AdminDashboard() {
           >
             Schedule Election
           </button>
+          </div>
         </div>
       </div>
+     
+     
     </div>
   );
 }
