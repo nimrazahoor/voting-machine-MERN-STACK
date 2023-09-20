@@ -36,7 +36,8 @@ app.use(
   app.use(require("./router/auth"));
   app.use(require("./router/candidates"));
   app.use(require("./router/constituency"));
-  app.use(require("./router/calculateResult"))
+  app.use(require("./router/calculateResult"));
+  app.use(require('./router/resultOfEachConstituency'));
   app.use(require("./router/election"));
   app.use(require("./router/polling"));
   app.use(require("./router/vote"));

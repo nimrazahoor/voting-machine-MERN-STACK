@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createConstituency } from "../APIcalls/APIs";
 
@@ -11,7 +10,6 @@ function CreateConstituency() {
     const token = sessionStorage.getItem("jwt");
     const userType = sessionStorage.getItem("userType");
     try {
-      console.log(constituency);
       const response = await createConstituency(constituency, token, userType); 
       alert(response.message);
       setConstituency({ name: "", location: "" });
@@ -23,8 +21,8 @@ function CreateConstituency() {
   };
 
   return (
-    <div className="container">
-      <h1>Create Constituency</h1>
+    <div className="container card">
+      <h4>Create Constituency</h4>
       <form onSubmit={handleSubmit}>
         <label>
           Constituency Name:

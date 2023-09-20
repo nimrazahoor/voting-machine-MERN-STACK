@@ -6,20 +6,15 @@ const authenticateUserByToken = require("../middleware/authenticate");
 router.post("/scheduleElection", authenticateUserByToken, async (req, res) => {
   try {
     if (req.headers.usertype !== "Admin") {
-      console.log("You are not admin");
       return res.status(404).json({
         message: "You cannot create constituency you are not admin ",
       });
     }
     const { electionName, startDate, endDate } = req.body;
     if (Date.now() > startDate || endDate < startDate)  {
-      console.log(
-        "Invalid election dates. Start date cannot be in the past, and end date must be after the start date."
-      );
       return res.status(400).json({ message: "Invalid dates" });
     } 
     const alreadyExists = await Election.findOne({ name: electionName });
-    console.log("-------------------------", alreadyExists);
     if (alreadyExists) {
       res
         .status(400)

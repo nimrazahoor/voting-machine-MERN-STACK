@@ -26,19 +26,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: "Voter",
   },
-  // constituency: {
-  //   // type: mongoose.Schema.Types.ObjectId,
-  //   // ref: 'constituency',
-  //   type: String,
-  //   enum: ['constituency1', 'constituency2', 'constituency3'],
-  //   required: true,
-  // },
   constituency: {
     type: String,
   },
 
   cnic: { type: String, required: true, unique: true },
-  picture: { type: String }, // Field to store the user's picture as Binary data
+  picture: { type: String }, 
   isCandidate: { type: Boolean, default: false },
   isVoted: { type: Boolean, default: false },
   isInvited: { type: Boolean, default: false },
@@ -54,7 +47,6 @@ const candidateSchema = new mongoose.Schema({
   partyName: { type: String, required: true },
   partySymbol: { type: String },
   approved: { type: Boolean, default: false },
-  constituency: { type: mongoose.Schema.Types.String, ref: "User" },
   voters: [
     {
       type: mongoose.Schema.Types.String,
@@ -63,12 +55,9 @@ const candidateSchema = new mongoose.Schema({
   ],
 });
 const constituencySchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true,unique:true },
   location: { type: String },
-  users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   electionSchema: [{ type: mongoose.Schema.Types.ObjectId, ref: "Election" }],
-  result: { type: String },
-  candidates: [{ type: mongoose.Schema.Types.ObjectId, ref: "Candidate" }],
 });
 
 const electionSchema = new mongoose.Schema({
@@ -93,6 +82,12 @@ const voteSchema = new mongoose.Schema({
   },
   constituency: { type: String },
 });
+const resultSchema = new mongoose.Schema({
+  constituency:{type:mongoose.Schema.Types.ObjectId,ref:"Constituency",required:true,unique:true},
+  name:{type:String},
+  partyName:{type:String},
+  total_votes:{type:Number},
+});
 
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
@@ -107,17 +102,17 @@ userSchema.methods.generateAuthToken = function () {
 
     this.tokens = this.tokens.concat({ token: token });
     this.save();
-    console.log("token");
     return token;
   } catch (err) {
     console.log("Error while generating auth token", err);
   }
 };
+
 const User = mongoose.model("User", userSchema);
 const Candidate = mongoose.model("Candidate", candidateSchema);
 const Constituency = mongoose.model("constituency", constituencySchema);
 const Poll = mongoose.model("Poll", pollSchema);
 const Election = mongoose.model("Election", electionSchema);
 const Vote = mongoose.model("Vote", voteSchema);
-
-module.exports = { User, Candidate, Constituency, Election, Vote, Poll };
+const Result = mongoose.model("Result",resultSchema);
+module.exports = { User, Candidate, Constituency, Election, Vote, Poll, Result };

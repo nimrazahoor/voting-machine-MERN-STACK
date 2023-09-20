@@ -14,49 +14,34 @@ router.get("/applied-candidates", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-// router.get(
-//   "/candidatesByConstituency",
-//  authenticateUserByToken,
-//   async (req, res) => {
-//     try {
-//       console.log("function working ")
-//       const userId = req.userId;;
-//       console.log(userId);
-//       const user = await User.findOne({ _id: userId });
-//       if(!user)
-//       {
-//         console.log("user not foun d")
-//       }
-//       console.log("user constituenct--", user.constituency);
-//     //  const userConstituency = user.constituency;
-//        const candidates = await User.find({
-//       isCandidate: true,
-//       constituency: user.constituency,
-//     })
 
-//       console.log("candidates------",candidates);
-//       const userIds = candidates.map(candidate => candidate._id);
-//       const userNames = candidates.map(candidate =>candidate.username);
-//       console.log(userIds);
-//       const candidateUserIds = userId;
+router.get(
+  "/getVotesCastedToCandidate",
+  authenticateUserByToken,
+  async (req, res) => {
+    try {
+      const userId = req.userId;
+      const user = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).json({message:"User not found"});
 
-//       // Find approved candidates with the given user IDs and populate the user details (username)
-//      const all_candidates = await Candidate.find({ _id: { $in: candidateUserIds }, approved: true })
-//         .populate('user', 'username')
-//         .exec((err, candidates) => {
-//           if (err) {
-//             console.error(err);
-//           } else {
-//             console.log(candidates);
-//           }
-//         });
-//       res.status(200).json(all_candidates);
-//     } catch (error) {
-//       console.error("Error while fetching candidates:", error);
-//       res.status(500).json({ error: "Internal server error" });
-//     }
-//   }
-// );
+      }
+       const candidate = Candidate.findOne({ user: userId, approved: true });
+       candidate.exec().then((candidate) => {
+        if (!candidate) {
+          return res.status(404).json({message:"Candidate not found"});
+
+        } else {
+          const VotersCount = candidate.voters?.length;
+          return res.status(200).json(VotersCount);
+        }
+      });
+    } catch (error) {
+      console.error("Error while fetching Your Voters:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
 router.get(
   "/candidatesByConstituency",
   authenticateUserByToken,
@@ -65,14 +50,13 @@ router.get(
       const userId = req.userId;
       const user = await User.findOne({ _id: userId });
       if (!user) {
-        console.log("user not found");
+        return res.status(404).json({message:"User not found"});
+
       }
-     // console.log(user.constituency);
       const candidates = await User.find({
         isCandidate: true,
         constituency: user.constituency,
       });
-
 
       const candidateUserIds = candidates.map((candidate) => candidate._id);
       const CandidateUserName = candidates.map(
@@ -80,22 +64,17 @@ router.get(
       );
       Candidate.find({ approved: true, user: { $in: candidateUserIds } })
         .then((candidates) => {
-         // console.log("candidates", candidates);
           let all_candidates = candidates;
           let i = 0;
           let mergedArray = [];
           for (i in candidates) {
-                mergedArray = all_candidates?.map((candidate, index) => ({  
-                _id : candidate._id, 
-                username: CandidateUserName[index],
-                partyName: candidate.partyName,
-                partySymbol: candidate.partySymbol,
-              }));
-            
-            
+            mergedArray = all_candidates?.map((candidate, index) => ({
+              _id: candidate._id,
+              username: CandidateUserName[index],
+              partyName: candidate.partyName,
+              partySymbol: candidate.partySymbol,
+            }));
           }
-
-       //   console.log("----------------------------",mergedArray);
           return res.status(200).json(mergedArray);
         })
         .catch((err) => {

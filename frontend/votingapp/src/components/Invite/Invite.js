@@ -8,9 +8,9 @@ const Invite = () => {
   const [cnic, setCnic] = useState("");
   const [results, setResults] = useState();
   const navigate = useNavigate();
+  
   useEffect(() => {
     fetchResults();
-    console.log(results);
   }, []);
 
   const fetchResults = async () => {
@@ -24,14 +24,12 @@ const Invite = () => {
           },
         }
       );
-      console.log("response  data", response.data);
       setResults(response.data);
     } catch (error) {
       console.error("Error fetching results:", error);
     }
   };
   const handleInvite = async () => {
-    console.log("function working");
     try {
       const response = await axios.post(
         "http://localhost:5000/inviteUser",
@@ -47,7 +45,6 @@ const Invite = () => {
           },
         }
       );
-      console.log(response);
 
       alert("Invitation sent successfully!");
       navigate('/admin-dashboard');
@@ -57,7 +54,7 @@ const Invite = () => {
   };
 
   return (
-    <div>
+    <div className="container card">
       <h2>Invite User</h2>
       <label htmlFor="userSelect">Select User:</label>
       <select

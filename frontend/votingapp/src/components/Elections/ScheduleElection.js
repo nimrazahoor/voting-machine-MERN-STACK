@@ -23,14 +23,12 @@ function ScheduleElection() {
     e.preventDefault();
     scheduleElection(electionData, token, userType)
       .then((response) => {
-        console.log("Election scheduled successfully:", response);
         alert("Elections Scheduled Successfully!");
         alert(response.message);
         navigate("/admin-dashboard");
       })
       .catch((error) => {
         alert("Error scheduling election");
-        console.log("Error scheduling election:", error);
       });
   };
 

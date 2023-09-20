@@ -5,9 +5,7 @@ const authenticateUserByToken = require('../middleware/authenticate');
 router.get('/getAllUsersOtherThenAdmin', authenticateUserByToken, async (req, res) => {
     try {
         const userId = req.userId;
-       // console.log(req.headers);
         if (req.headers.usertype !== "Admin") {
-          console.log("You are not admin");
           return res
             .status(404)
             .json({
@@ -22,19 +20,16 @@ router.get('/getAllUsersOtherThenAdmin', authenticateUserByToken, async (req, re
       }
 });
 router.post('/inviteUser', authenticateUserByToken, async (req, res) => {
-    console.log("WORKING");;
     try {
       const userId = req.userId;
         const loggedInUser = await User.findById(userId);
       if (loggedInUser.userType !== 'Admin') {
-        console.log('You are not admin');
         return res.status(403).json({ message: 'You are not authorized to perform this action.' });
       }
   
       const { userId: invitedUserId, constituency, cnic } = req.body;
   
       const invitedUser = await User.findById(invitedUserId);
-      console.log("invited user ",invitedUser);
       if (!invitedUser) {
         return res.status(404).json({ message: 'User not found.' });
       }

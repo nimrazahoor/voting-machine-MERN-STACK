@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+
 import PollingTimer from './PollingTimer';
 import { startPolling } from '../APIcalls/APIs'; 
 
 function PollingControl({ electionId }) {
   const location = useLocation();
   const [poll, setPoll] = useState();
-  console.log(electionId);
   const [duration, setDuration] = useState();
 
   const handleStartPolling = async () => {
@@ -18,12 +17,11 @@ function PollingControl({ electionId }) {
         duration,
         electionId
       );
-      console.log("response  data", response.message);
       setPoll(response);
       alert("Poll Started");
       window.location.reload(false);
     } catch (error) {
-      console.log("Error starting polling:", error.message);
+      alert("Error starting polling:"+ error.message);
     }
   };
 

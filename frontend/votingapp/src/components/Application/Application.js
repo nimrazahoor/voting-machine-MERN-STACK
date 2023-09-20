@@ -22,13 +22,14 @@ const handleSubmit = async (e) => {
     }
 
     const responseData = await applyCandidate(formData, token);
-    console.log(responseData);
     alert(responseData.message);
-
     setPartyName('');
     setPartySymbol(null);
     navigate(-1);
-  } catch (error) {
+
+  } 
+  catch (error) 
+  {
     console.error('Error:', error);
     alert('Failed to apply for candidacy: ' + error);
     navigate(-1);
@@ -37,8 +38,8 @@ const handleSubmit = async (e) => {
   
 
   return (
-    <div>
-      <h1>Application for becoming Candidate</h1>
+    <div className='container card'>
+      <h4>Application for becoming Candidate</h4>
       <form className="container" onSubmit={handleSubmit}>
         <label htmlFor="partyName">Party Name:</label>
         <input

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const PollingTimer = () => {
   const [remainingTime, setRemainingTime] = useState(0);
@@ -43,8 +43,8 @@ const PollingTimer = () => {
   };
 
   return (
-    <div>
-      <h2>Time Remaining in Polling: {formatTime(remainingTime)}</h2>
+    <div >
+      <h4>Time Remaining in Polling: {formatTime(remainingTime)}</h4>
     </div>
   );
 };
