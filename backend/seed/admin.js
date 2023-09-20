@@ -8,7 +8,6 @@ async function seedAdminUser() {
       const existingAdmin = await User.findOne({ userType: "Admin" });
   
       if (existingAdmin) {
-        console.log("Admin user already exists.");
       } else {
         const adminData = {
           username: "admin",
@@ -18,18 +17,13 @@ async function seedAdminUser() {
           constituency :"PP-123",
           cnic: "35403-1573908-4", 
         };
-  
-  
         const adminUser = new User(adminData);
         await adminUser.save();
-  
-        console.log("Admin user created successfully.");
       }
     } catch (error) {
       console.error("Error creating admin user:", error);
     }
   }
-  
   seedAdminUser().then(() => {
     mongoose.connection.close();
   });

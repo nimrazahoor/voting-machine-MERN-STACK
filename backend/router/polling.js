@@ -1,14 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { Election, Poll } = require("../modals/modals");
+const { Election, Poll, Candidate ,User,Vote} = require("../modals/modals");
 const authenticateUserByToken = require("../middleware/authenticate");
 
 router.post("/startPolling", authenticateUserByToken, async (req, res) => {
-  console.log("polling function workking  working");
   try {
     if (req.headers.usertype !== "Admin") {
-      console.log("Working");
-      console.log("You are not admin")
       return res.status(404).json({
         message: "You cannot create constituency you are not admin ",
       });
@@ -33,9 +30,17 @@ router.post("/startPolling", authenticateUserByToken, async (req, res) => {
       end_time: endTime,
       polling_duration : durationInMilliseconds,
     });
+
     poll.save();
-    console.log("poll ------",poll);
-    
+
+    try {
+      await Candidate.updateMany({}, { $set: { voters: [] } });
+      await User.updateMany({}, { $set: { isVoted: false } });
+      await Vote.deleteMany({})
+    } catch (error) {
+      console.error("Error fetching candidates:", error);
+      res.status(500).json({ error: "Failed to fetch candidates" });
+    }    
     return res.status(200).json(poll);
   } catch (error) {
     console.error("Error starting polling:", error);
@@ -46,7 +51,6 @@ router.post("/startPolling", authenticateUserByToken, async (req, res) => {
 router.post("/endPolling", async (req, res) => {
   try {
     if (req.headers.usertype !== "Admin") {
-      console.log("You are not admin");
       return res.status(404).json({
         message: "You cannot end Polling you are not admin ",
       });
@@ -56,6 +60,7 @@ router.post("/endPolling", async (req, res) => {
 
     await Poll.deleteMany({ _id: { $in: expiredPolls.map(poll => poll._id) } });
     expiredPolls.duration = 0;
+    
     res.status(200).json({ message: "Polling ended successfully" });
   } catch (error) {
     console.error("Error ending polling:", error);

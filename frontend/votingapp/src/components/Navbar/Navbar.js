@@ -1,23 +1,54 @@
 import React from "react";
-import "../Navbar/Navbar.css";
-import { useNavigate } from "react-router-dom";
+
 const Navbar = () => {
   const handleLogout = () => {
     sessionStorage.removeItem("jwt");
     sessionStorage.removeItem("userType");
+    sessionStorage.removeItem("poll");
     alert("Logged Out");
-    return <a href="/login">Login</a>;
   };
+
   return (
-    <nav className="navbar">
-      <ul className="nav-links">
-        <button className="submit-button">
-          <a href="/login">Login</a>
-        </button>
-        <button className="submit-button" onClick={handleLogout}>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a className="navbar-brand" href="/">
+        Voting App
+      </a>
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
+
+      <div className="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul className="navbar-nav">
+          <li className="nav-item active">
+            <a className="nav-link" href="/">
+              Register <span className="sr-only"></span>
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/login">
+              Login
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <button
+        type="button"
+        className="btn btn-primary ml-auto"
+        onClick={handleLogout}
+      >
+        <a className="nav-link" href="/login">
           Logout
-        </button>
-      </ul>
+        </a>
+      </button>
     </nav>
   );
 };

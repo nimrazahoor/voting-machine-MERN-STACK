@@ -1,9 +1,7 @@
-import axios, { formToJSON } from "axios";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { fetchConstituencies, signup } from "../APIcalls/APIs"
-import "./style.css";
 function Signup() {
   const [User, setUser] = useState({
     username: "",
@@ -21,7 +19,6 @@ function Signup() {
       try {
         const constituenciesData = await fetchConstituencies();
         setConstituencies(constituenciesData);
-        console.log(constituenciesData);
       } catch (error) {
         console.error("Error fetching constituencies:", error);
       }
@@ -44,9 +41,7 @@ function Signup() {
     formData.append("constituency", constituencyName);
 
     try {
-      console.log("values", formData);
       const response = await signup(formData);
-      console.log("Response from server:", response);
         alert("Success"+response.message);
         navigate("/login");
       }
@@ -57,7 +52,7 @@ function Signup() {
   };
  
   return (
-    <div className="container">
+    <div className="container card w-50">
       <h1>Sign Up</h1>
       <Formik
           onSubmit={handleSubmit}
